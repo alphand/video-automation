@@ -38,5 +38,6 @@ video_automation_*/
 temp_*/
 *.temp
 *.mp4
-!examples/audio/*.mp3
-!examples/images/*.jpg
+
+# Examples
+examples/
