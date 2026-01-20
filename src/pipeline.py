@@ -118,7 +118,9 @@ def run_pipeline(
     fps: int = 30,
     transition_duration: float = 1.0,
     max_workers: int = None,
-    temp_dir: Path = None
+    temp_dir: Path = None,
+    audio_transition_mode: str = 'gap',
+    audio_gap_duration: float = 0.5
 ) -> Path:
     """
     Run complete video automation pipeline.
@@ -133,6 +135,8 @@ def run_pipeline(
         transition_duration: Duration of transitions (default 1.0s)
         max_workers: Max parallel workers (default: os.cpu_count())
         temp_dir: Temporary directory for intermediate files (auto-created if None)
+        audio_transition_mode: Audio transition mode: 'gap', 'crossfade', or 'none' (default 'gap')
+        audio_gap_duration: Duration of silence gap in seconds for gap mode (default 0.5)
 
     Returns:
         Path to final output video
@@ -211,7 +215,9 @@ def run_pipeline(
             video_paths=video_paths,
             output_path=output_path,
             transition_duration=transition_duration,
-            use_random_transitions=True
+            use_random_transitions=True,
+            audio_transition_mode=audio_transition_mode,
+            audio_gap_duration=audio_gap_duration
         )
 
         print(f"✨ Final video created: {output_path}")

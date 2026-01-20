@@ -78,6 +78,21 @@ Examples:
     )
 
     parser.add_argument(
+        '--audio-transition-mode',
+        type=str,
+        default='gap',
+        choices=['gap', 'crossfade', 'none'],
+        help='Audio transition between clips: gap (silence), crossfade, or none (default: gap)'
+    )
+
+    parser.add_argument(
+        '--audio-gap-duration',
+        type=float,
+        default=0.5,
+        help='Duration of silence gap between clips in seconds (default: 0.5, only for gap mode)'
+    )
+
+    parser.add_argument(
         '--workers',
         type=int,
         default=None,
@@ -117,7 +132,9 @@ def main() -> int:
             fps=args.fps,
             transition_duration=args.transition_duration,
             max_workers=args.workers,
-            temp_dir=args.temp_dir
+            temp_dir=args.temp_dir,
+            audio_transition_mode=args.audio_transition_mode,
+            audio_gap_duration=args.audio_gap_duration
         )
 
         print("\n" + "=" * 60)
