@@ -114,6 +114,8 @@ python -m src.cli \
 | `--height` | `-H` | Output video height | 1080 |
 | `--fps` | `-f` | Output frame rate | 30 |
 | `--transition-duration` | `-t` | Duration of transitions (seconds) | 1.0 |
+| `--audio-transition-mode` | | Audio transition: gap, crossfade, or none (default: gap) |
+| `--audio-gap-duration` | | Silence gap duration in seconds (default: 0.5, gap mode only) |
 | `--workers` | | Number of parallel workers | CPU count |
 | `--temp-dir` | | Custom temp directory for intermediate files | Auto-created |
 
@@ -137,6 +139,26 @@ python -m src.cli -i images/ -a audio/ -o output.mp4 -t 2.0
 **Keep temporary files for debugging:**
 ```bash
 python -m src.cli -i images/ -a audio/ -o output.mp4 --temp-dir /tmp/my-debug
+```
+
+**Use silence gaps between clips (default):**
+```bash
+python -m src.cli -i images/ -a audio/ -o output.mp4
+```
+
+**Use crossfade (old behavior):**
+```bash
+python -m src.cli -i images/ -a audio/ -o output.mp4 --audio-transition-mode crossfade
+```
+
+**Custom gap duration:**
+```bash
+python -m src.cli -i images/ -a audio/ -o output.mp4 --audio-gap-duration 1.0
+```
+
+**Hard cuts (no audio transition):**
+```bash
+python -m src.cli -i images/ -a audio/ -o output.mp4 --audio-transition-mode none
 ```
 
 ## How It Works
@@ -295,6 +317,11 @@ scale=-2:ih*10,zoompan=z='...':x='...':y='...':d=...:s=1920x1080:fps=30
 [0:v][1:v]xfade=transition=fade:duration=1.0:offset=29.0[v0]
 [0:a][1:a]acrossfade=d=1.0[a0]
 ```
+
+**Audio Transitions**:
+- Gap mode (default): `aevalsrc=exprs=0:d=0.5` creates silence + `concat=n=5:v=0:a=1` chains audio+silence
+- Crossfade mode: `acrossfade=d=1.0` overlaps audio clips
+- None mode: `concat=n=3:v=0:a=1` simple hard cut
 
 ### Design Decisions
 
